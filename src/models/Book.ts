@@ -1,11 +1,32 @@
-// models/Book.js
-
-import {db}from '../../database.js'; // Adjust the path according to your project structure
+import exp from 'constants';
+import {db}from '../server.js'; 
 
 class Book {
-    static async findAll() {
-        // Fetch all books from the database
-        const rows = await db.all(`SELECT * FROM books`);
+    static async findAll(filter?: { id?: any, pub_year?: any, author_id?: any }) {
+        let query = `SELECT * FROM books`;
+
+        if (filter) {
+            const { id, pub_year, author_id } = filter;
+            const conditions = [];
+
+            if (id) {
+                conditions.push(`id = ${id}`);
+            }
+
+            if (pub_year) {
+                conditions.push(`pub_year = ${pub_year}`);
+            }
+
+            if (author_id) {
+                conditions.push(`author_id = ${author_id}`);
+            }
+
+            if (conditions.length > 0) {
+                query += ` WHERE ${conditions.join(' AND ')}`;
+            }
+        }
+
+        const rows = await db.all(query);
         return rows;
     }
 
@@ -35,15 +56,15 @@ class Book {
 
     static async create(data:any) {
         // Create a new book in the database
-        const result = await db.run(`INSERT INTO books (author_id, title, pub_year, genre) VALUES (?, ?, ?, ?)`, [data.author_id, data.title, data.pub_year, data.genre]);
+        const result = await db.run(`INSERT INTO books (id, author_id, title, pub_year, genre) VALUES (?, ?, ?, ?, ?)`, [data.id, data.author_id, data.title, data.pub_year, data.genre]);
         return result;
     }
 
-    static async update(id:any, data:any) {
-        // Update an existing book in the database
+    /*static async update(id:any, data:any) {
+        
         const result = await db.run(`UPDATE books SET author_id = ?, title = ?, pub_year = ?, genre = ? WHERE id = ?`, [data.author_id, data.title, data.pub_year, data.genre, id]);
         return result;
-    }
+    }*/
 
     static async delete(id:any) {
         // Delete a book from the database
@@ -52,4 +73,4 @@ class Book {
     }
 }
 
-module.exports = Book;
+export default Book;

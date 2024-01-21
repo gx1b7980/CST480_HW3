@@ -2,8 +2,8 @@ import express, { Request, Response } from 'express';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import * as url from 'url';
-import authorsRouter  from './routes/authors.js'; // Adjust the import based on your actual file
-import booksRouter from './routes/books.js'; // Adjust the import based on your actual file
+import authorsRouter  from './routes/authors.js'; 
+import booksRouter from './routes/books.js'; 
 import { v4 as uuidv4 } from 'uuid';
 
 const app = express();
@@ -13,7 +13,7 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 const dbfile = `${__dirname}/database.db`;
 
 // Open the database
-const db = await open({
+export const db = await open({
     filename: dbfile,
     driver: sqlite3.Database
 });
@@ -223,3 +223,5 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}/`);
 });
+
+export default app;

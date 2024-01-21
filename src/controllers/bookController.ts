@@ -1,32 +1,29 @@
-const Book = require('../models/Book');
+import Book from '../models/Book.js';
 import { Request, Response } from 'express';
 
 const getAllBooks = async (req: Request, res: Response) => {
     try {
         const { id, pub_year, author_id } = req.query;
-        const whereClause: any = {};
+        let books:any = {};
 
         if (id) {
-            whereClause.id = id;
+            books = await Book.findById(id);
         }
 
         if (pub_year) {
-            whereClause.pub_year = pub_year;
+            books = await Book.findByPubYear(id);
         }
 
         if (author_id) {
-            whereClause.author_id = author_id;
+            books = await Book.findByAuthorId(id);
         }
-
-        const books = await Book.findAll({
-            where: Object.keys(whereClause).length > 0 ? whereClause : undefined
-        });
 
         res.status(200).json(books);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
+const bookList: Book[] = [];
 
 const getBookById = async (req: Request, res: Response) => {
     try {
@@ -52,7 +49,7 @@ const createBook = async (req: Request, res: Response) => {
 
 };
 
-const updateBook = async (req: Request, res: Response) => {
+/*const updateBook = async (req: Request, res: Response) => {
     try {
         const book = await Book.update(req.body, {
             where: {
@@ -63,11 +60,11 @@ const updateBook = async (req: Request, res: Response) => {
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
-};
+};*/
 
 const deleteBook = async (req: Request, res: Response) => {
     try {
-        await Book.destroy({
+        await Book.delete({
             where: {
                 id: req.params.id
             }
@@ -78,4 +75,4 @@ const deleteBook = async (req: Request, res: Response) => {
     }
 };
 
-export { getAllBooks, getBookById, createBook, updateBook, deleteBook };
+export { getAllBooks, getBookById, createBook, deleteBook };

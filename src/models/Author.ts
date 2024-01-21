@@ -1,4 +1,4 @@
-const db = require('../../database.db'); // Adjust the path according to your project structure
+import db from '../server.js';
 
 class Author {
     static async findAll() {
@@ -15,21 +15,17 @@ class Author {
 
     static async create(data:any) {
         // Create a new author in the database
-        const result = await db.run(`INSERT INTO authors (name, bio) VALUES (?, ?)`, [data.name, data.bio]);
+        const result = await db.post(`INSERT INTO authors (name, bio) VALUES (?, ?)`, [data.name, data.bio]);
         return result;
     }
 
-    static async update(id:any, data:any) {
-        // Update an existing author in the database
-        const result = await db.run(`UPDATE authors SET name = ?, bio = ? WHERE id = ?`, [data.name, data.bio, id]);
-        return result;
-    }
+
 
     static async delete(id:any) {
         // Delete an author from the database
-        const result = await db.run(`DELETE FROM authors WHERE id = ?`, [id]);
+        const result = await db.delete(`DELETE FROM authors WHERE id = ?`, [id]);
         return result;
     }
 }
 
-module.exports = Author;
+export default Author;

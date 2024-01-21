@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllAuthors, getAuthorById, createAuthor, updateAuthor, deleteAuthor } from '../controllers/authorController.js'; // Ensure the paths are correct
+import { getAllAuthors, getAuthorById, createAuthor, deleteAuthor } from '../controllers/authorController.js'; // Ensure the paths are correct
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.get('/:id', getAuthorById);
 router.post('/', createAuthor);
 
 // PUT update an existing author
-router.put('/:id', updateAuthor);
+//router.put('/:id', updateAuthor);
 
 // DELETE an author
 router.delete('/:id', deleteAuthor);

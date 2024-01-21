@@ -1,4 +1,4 @@
-const Author = require('../models/Author');
+import Author from '../models/Author.js';
 import { Request, Response } from 'express';
 
 const getAllAuthors = async (req: Request, res: Response) => {
@@ -31,7 +31,7 @@ const createAuthor = async (req: Request, res: Response) => {
         res.status(500).json({ message: error.message });
     }
 };
-
+/*
 const updateAuthor = async (req: Request, res: Response) => {
     try {
         const author = await Author.update(req.body, {
@@ -43,11 +43,11 @@ const updateAuthor = async (req: Request, res: Response) => {
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
-};
+};*/
 
 const deleteAuthor = async (req: Request, res: Response) => {
     try {
-        await Author.destroy({
+        await Author.delete({
             where: {
                 id: req.params.id
             }
@@ -58,10 +58,4 @@ const deleteAuthor = async (req: Request, res: Response) => {
     }
 };
 
-module.exports = {
-    getAllAuthors,
-    getAuthorById,
-    createAuthor,
-    updateAuthor,
-    deleteAuthor
-};
+export { getAllAuthors, getAuthorById, createAuthor, deleteAuthor };
