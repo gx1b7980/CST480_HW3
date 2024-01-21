@@ -1,6 +1,6 @@
 // models/Book.js
 
-const db = require('../../database'); // Adjust the path according to your project structure
+import {db}from '../../database.js'; // Adjust the path according to your project structure
 
 class Book {
     static async findAll() {
@@ -13,6 +13,24 @@ class Book {
         // Fetch a single book by id from the database
         const row = await db.get(`SELECT * FROM books WHERE id = ?`, [id]);
         return row;
+    }
+
+    static async findByAuthorId(author_id:any) {
+        // Fetch all books by author id from the database
+        const rows = await db.all(`SELECT * FROM books WHERE author_id = ?`, [author_id]);
+        return rows;
+    }
+
+    static async findByPubYear(pub_year:any) {
+        // Fetch all books by publication year from the database
+        const rows = await db.all(`SELECT * FROM books WHERE pub_year >= ?`, [pub_year]);
+        return rows;
+    }
+
+    static async findByGenre(genre:any) {
+        // Fetch all books by genre from the database
+        const rows = await db.all(`SELECT * FROM books WHERE genre = ?`, [genre]);
+        return rows;
     }
 
     static async create(data:any) {

@@ -3,7 +3,25 @@ import { Request, Response } from 'express';
 
 const getAllBooks = async (req: Request, res: Response) => {
     try {
-        const books = await Book.findAll();
+        const { id, pub_year, author_id } = req.query;
+        const whereClause: any = {};
+
+        if (id) {
+            whereClause.id = id;
+        }
+
+        if (pub_year) {
+            whereClause.pub_year = pub_year;
+        }
+
+        if (author_id) {
+            whereClause.author_id = author_id;
+        }
+
+        const books = await Book.findAll({
+            where: Object.keys(whereClause).length > 0 ? whereClause : undefined
+        });
+
         res.status(200).json(books);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -60,10 +78,4 @@ const deleteBook = async (req: Request, res: Response) => {
     }
 };
 
-module.exports = {
-    getAllBooks,
-    getBookById,
-    createBook,
-    updateBook,
-    deleteBook
-};
+export { getAllBooks, getBookById, createBook, updateBook, deleteBook };

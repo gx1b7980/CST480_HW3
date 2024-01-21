@@ -75,9 +75,23 @@ app.post('/authors', async (req: Request, res: Response) => {
 app.delete('/authors/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        // Delete author by ID from the database
-        await db.run('DELETE FROM authors WHERE id = ?', id);
-        res.status(200).json({ message: `Deleted author with ID ${id}` });
+        // Check if the author exists in the database
+        const author = await db.get('SELECT * FROM authors WHERE id = ?', id);
+        
+        if (!author) {
+            res.status(404).json({ message: `Author with ID ${id} not found` });
+        } else {
+            // Check if the author has any books in the book database
+            const authorBooks = await db.get('SELECT * FROM books WHERE author_id = ?', id);
+            
+            if (authorBooks) {
+                res.status(400).json({ message: `Author with ID ${id} has books in the book database. Cannot delete.` });
+            } else {
+                // Delete author by ID from the database
+                await db.run('DELETE FROM authors WHERE id = ?', id);
+                res.status(200).json({ message: `Deleted author with ID ${id}` });
+            }
+        }
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
@@ -159,6 +173,11 @@ app.get('/books', async (req: Request, res: Response) => {
 app.post('/books', async (req: Request, res: Response) => {
     const { author_id, title, pub_year, genre } = req.body;
     try {
+        // Check if the author exists in the database
+        const author = await db.get('SELECT * FROM authors WHERE id = ?', author_id);
+        if (!author) {
+            return res.status(404).json({ message: `Author with ID ${author_id} not found` });
+        }
         // Insert the new book into the database
         await db.run('INSERT INTO books (id, author_id, title, pub_year, genre) VALUES (?, ?, ?, ?, ?)', [uuidv4(), author_id, title, pub_year, genre]);
         res.status(201).json({ message: "Created new book" });
@@ -183,22 +202,20 @@ app.get('/books/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/books', async (req: Request, res: Response) => {
-    const { author_id, title, pub_year, genre } = req.body;
-
+app.delete('/books/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
     try {
-        // Insert the new book into the database
-        await db.run('INSERT INTO books (id, author_id, title, pub_year, genre) VALUES (?, ?, ?, ?, ?)', [uuidv4(), author_id, title, pub_year, genre]);
-        res.status(201).json({ message: "Created new book" });
+        // Check if the book exists in the database
+        const book = await db.get('SELECT * FROM books WHERE id = ?', id);
+        if (!book) {
+            return res.status(404).json({ message: `Book with ID ${id} not found` });
+        }
+        // Delete book by ID from the database
+        await db.run('DELETE FROM books WHERE id = ?', id);
+        res.status(200).json({ message: `Deleted book with ID ${id}` });
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
-});
-
-app.delete('/books/:id', async (req: Request, res: Response) => {
-    // Delete a book by ID
-    // Implement your logic here
-    res.status(200).json({ message: `Deleted book with ID ${req.params.id}` });
 });
 
 // Start the server
