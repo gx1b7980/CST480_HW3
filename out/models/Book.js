@@ -49,6 +49,8 @@ class Book {
     }*/
     static async delete(id) {
         // Delete a book from the database
+        const row = await db.get(`SELECT * FROM books WHERE id = ?`, [id]);
+        console.log(row);
         const result = await db.run(`DELETE FROM books WHERE id = ?`, [id]);
         return result;
     }

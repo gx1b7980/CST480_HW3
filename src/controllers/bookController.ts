@@ -56,9 +56,12 @@ const deleteBook = async (req: Request, res: Response) => {
                 id: req.params.id
             }
         });
-        res.status(204).end();
+        let item = await Book.findById(req.params.id);
+        console.log("Item"+item.data);
+        res.status(204).json(item.data);
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        console.log("Fail with code 0");
+        res.status(500).json({ message: "Fail with code 0" });
     }
 };
 

@@ -35,94 +35,184 @@ afterEach(async () => {
     await db.run("DELETE FROM books");
     process.stdout.write("Deleted all");
 });
-test('GET /authors/:id', async () => {
-    let id = 1; // Replace with the desired author id
-    const result = await db.get("SELECT * FROM authors WHERE id = ?", [id]);
-    console.log(result);
-    const response = await axios.get(`/authors/${id}`);
-    expect(response.status).toBe(200);
-    expect(response.data).toEqual({
-        id: A1,
-        a_name: 'John Doe',
-        bio: 'Lorem ipsum dolor sit amet'
+describe('Author Suite', () => {
+    test('GET /authors/:id', async () => {
+        let id = 1; // Replace with the desired author id
+        const result = await db.get("SELECT * FROM authors WHERE id = ?", [id]);
+        console.log(result);
+        const response = await axios.get(`/authors/${id}`);
+        expect(response.status).toBe(200);
+        expect(response.data).toEqual({
+            id: A1,
+            a_name: 'John Doe',
+            bio: 'Lorem ipsum dolor sit amet'
+        });
+    });
+    test('GET /authors/:id', async () => {
+        var _a, _b;
+        let id = 999; // Replace with an incorrect author id
+        try {
+            const response = await axios.get(`/authors/${id}`);
+            expect(response.status).toBe(404);
+            console.log("Should not print: " + response.data); // Debug statement
+        }
+        catch (error) {
+            const axiosError = error;
+            console.log("Get Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
+            expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(404);
+        }
+    });
+    test('GET /authors/all', async () => {
+        var _a, _b;
+        try {
+            const response = await axios.get(`/authors/all/`);
+            expect(response.status).toBe(200);
+            //expect(response.status).toBe('success');
+            console.log("Respose: " + response.status); // Debug statement
+            expect(response.data.widget).toHaveLength(2);
+            console.log("Length Matches");
+        }
+        catch (error) {
+            const axiosError = error;
+            console.log("Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
+            expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(404);
+        }
+    });
+    test('POST /authors', async () => {
+        const data = { id: 4, a_name: "John Doe", bio: "Lorem ipsum dolor sit amet" };
+        const response = await axios.post('/authors/post', data);
+        expect(response.status).toBe(201);
+        console.log("Response: " + response); // Debug statement
+        expect(response.data.lastID).toEqual(4);
+    });
+    test('POST /authors with incorrect data', async () => {
+        var _a, _b;
+        const data = { id: 1, a_name: 'John Doe', bio: 'Lorem ipsum dolor sit amet' };
+        try {
+            const response = await axios.post('/authors', data);
+            expect(response.status).toBe(400);
+            console.log("SHOULD NOT PRINT: " + response.data); // Debug statement
+        }
+        catch (error) {
+            const axiosError = error;
+            console.log("Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
+            expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(500);
+        }
+    });
+    test('DELETE /authors/:id', async () => {
+        let id = 1; // Replace with the desired author id
+        const response = await axios.delete(`/authors/${id}`);
+        expect(response.status).toBe(204);
+        expect(response.data).toEqual("");
+    });
+    test('DELETE /authors/:id with incorrect data', async () => {
+        var _a, _b;
+        let id = 999; // Replace with an incorrect author id
+        try {
+            const response = await axios.delete(`/authors/${id}`);
+            expect(response.status).toBe(404);
+            console.log("SHOULD NOT PRINT: " + response.data); // Debug statement
+        }
+        catch (error) {
+            const axiosError = error;
+            console.log("Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
+            expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(500);
+        }
     });
 });
-test('GET /authors/all', async () => {
-    var _a, _b;
-    try {
-        const response = await axios.get(`/authors/all/`);
+describe('Book Suite', () => {
+    test('GET /books/:id', async () => {
+        console.log("BOOK TESTS START");
+        let id = 5; // Replace with the desired book id
+        const result = await db.get("SELECT * FROM books WHERE id = ?", [id]);
+        console.log("GET 1 RESPONSE: " + result);
+        const response = await axios.get(`/books/${id}`);
         expect(response.status).toBe(200);
-        //expect(response.status).toBe('success');
-        console.log("Respose: " + response.status); // Debug statement
-        expect(response.data.widget).toHaveLength(2);
-        console.log("Length Matches");
-    }
-    catch (error) {
-        const axiosError = error;
-        console.log("Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
-        expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(404);
-    }
-});
-test('POST /authors', async () => {
-    const data = { id: 4, a_name: "John Doe", bio: "Lorem ipsum dolor sit amet" };
-    const response = await axios.post('/authors/post', data);
-    expect(response.status).toBe(201);
-    console.log("Response: " + response); // Debug statement
-    expect(response.data.lastID).toEqual(4);
-});
-test('DELETE /authors/:id', async () => {
-    let id = 1; // Replace with the desired author id
-    const response = await axios.delete(`/authors/${id}`);
-    expect(response.status).toBe(204);
-    expect(response.data).toEqual("");
-});
-test('GET /books/:id', async () => {
-    console.log("BOOK TESTS START");
-    let id = 5; // Replace with the desired book id
-    const result = await db.get("SELECT * FROM books WHERE id = ?", [id]);
-    console.log("GET 1 RESPONSE: " + result);
-    const response = await axios.get(`/books/${id}`);
-    expect(response.status).toBe(200);
-    expect(response.data).toEqual({
-        id: 5,
-        author_id: 1,
-        title: 'Book 1',
-        pub_year: '2020',
-        genre: 'Fiction'
+        expect(response.data).toEqual({
+            id: 5,
+            author_id: 1,
+            title: 'Book 1',
+            pub_year: '2020',
+            genre: 'Fiction'
+        });
     });
-});
-test('GET /books/all', async () => {
-    var _a, _b;
-    try {
-        const response = await axios.get(`/books/`);
-        console.log("GET 2Response: " + response.status); // Debug statement
-        expect(response.status).toBe(200);
-        console.log(response.data);
-        expect(response.data).toHaveLength(1);
-        console.log("GET Length Matches");
-    }
-    catch (error) {
-        const axiosError = error;
-        console.log("GET Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
-        expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(404);
-    }
-});
-test('POST /books', async () => {
-    const data = {
-        id: 6,
-        author_id: 2,
-        title: 'Book 2',
-        pub_year: '2022',
-        genre: 'Mystery'
-    };
-    console.log("POST TEST\n\n\n");
-    const response = await axios.post('/books/post', data);
-    expect(response.status).toBe(201);
-    console.log("POST RESPONSE: " + response.status);
-    expect(response.data.lastID).toEqual(6);
-});
-test('DELETE /books/:id', async () => {
-    let id = 5; // Replace with the desired book id
-    const response = await axios.delete(`/books/${id}`);
-    expect(response.status).toBe(204);
+    test('GET /books/:id with incorrect id', async () => {
+        var _a, _b;
+        try {
+            let id = 999; // Replace with the incorrect book id
+            const response = await axios.get(`/books/${id}`);
+            console.log("GET 3 Response: " + response.status); // Debug statement
+            expect(response.status).toBe(404);
+            console.log(response.data);
+            expect(response.data).toEqual("SHOUD NOT PRINT");
+        }
+        catch (error) {
+            const axiosError = error;
+            console.log("GET Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
+            expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(404);
+        }
+    });
+    test('GET /books/all', async () => {
+        var _a, _b;
+        try {
+            const response = await axios.get(`/books/`);
+            console.log("GET 2Response: " + response.status); // Debug statement
+            expect(response.status).toBe(200);
+            console.log(response.data);
+            expect(response.data).toHaveLength(1);
+            console.log("GET Length Matches");
+        }
+        catch (error) {
+            const axiosError = error;
+            console.log("GET Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
+            expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(404);
+        }
+    });
+    test('POST /books', async () => {
+        const data = {
+            id: 6,
+            author_id: 2,
+            title: 'Book 2',
+            pub_year: '2022',
+            genre: 'Mystery'
+        };
+        console.log("POST TEST\n\n\n");
+        const response = await axios.post('/books/post', data);
+        expect(response.status).toBe(201);
+        console.log("POST RESPONSE: " + response.status);
+        expect(response.data.lastID).toEqual(6);
+    });
+    test('POST /books with incorrect data', async () => {
+        var _a, _b;
+        const data = { id: 5, author_id: 999, title: 'Book 1', pub_year: '2020', genre: 'Fiction' };
+        try {
+            const response = await axios.post('/books', data);
+            expect(response.status).toBe(400);
+            console.log("SHOULD NOT PRINT: " + response.data); // Debug statement
+        }
+        catch (error) {
+            const axiosError = error;
+            console.log("Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
+            expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(500);
+        }
+    });
+    test('DELETE /books/:id', async () => {
+        let id = 5; // Replace with the desired book id
+        const response = await axios.delete(`/books/${id}`);
+        expect(response.status).toBe(204);
+    });
+    test('DELETE /books/:id with incorrect data', async () => {
+        var _a, _b;
+        let id = 999; // Replace with an incorrect book id
+        try {
+            const response = await axios.delete(`/books/${id}`);
+            expect(response.status).toBe(404);
+            console.log("SHOULD NOT PRINT: " + response.data); // Debug statement
+        }
+        catch (error) {
+            const axiosError = error;
+            console.log("Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
+            expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(500);
+        }
+    });
 });
