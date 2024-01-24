@@ -1,4 +1,5 @@
 import Book from '../models/Book.js';
+import Author from '../models/Author.js';
 import { Request, Response } from 'express';
 
 const getAllBooks = async (req: Request, res: Response) => {
@@ -9,7 +10,6 @@ const getAllBooks = async (req: Request, res: Response) => {
         res.status(500).json({ message: error.message });
     }
 };
-const bookList: Book[] = [];
 
 const getBookById = async (req: Request, res: Response) => {
     try {
@@ -26,39 +26,32 @@ const getBookById = async (req: Request, res: Response) => {
 
 const createBook = async (req: Request, res: Response) => {
     try {
+        const author = await Author.findById(req.body.author_id);
+        if (!author) {
+            res.status(404).json({ message: 'Author not found' });
+            return;
+        }
+
         const book = await Book.create(req.body);
-        console.log("BOOK: "+book.lastID);
+        console.log("BOOK: " + book.lastID);
         res.status(201).json(book);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
-    
-
 };
-
-/*const updateBook = async (req: Request, res: Response) => {
-    try {
-        const book = await Book.update(req.body, {
-            where: {
-                id: req.params.id
-            }
-        });
-        res.status(201).json(book);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-};*/
 
 const deleteBook = async (req: Request, res: Response) => {
     try {
-        await Book.delete({
-            where: {
-                id: req.params.id
-            }
-        });
-        let item = await Book.findById(req.params.id);
-        console.log("Item"+item.data);
-        res.status(204).json(item.data);
+        
+        const book = await Book.findById(req.params.id);
+        console.log("BOOK: " + book);
+        if(book == undefined){
+            res.status(500).json({ message: 'Book not found' });
+            return;
+        }
+        await Book.delete(req.params.id);
+        console.log("Flag00");
+        res.status(204).json("item.data");
     } catch (error: any) {
         console.log("Fail with code 0");
         res.status(500).json({ message: "Fail with code 0" });

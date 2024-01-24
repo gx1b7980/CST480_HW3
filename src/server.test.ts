@@ -223,7 +223,9 @@ describe('Book Suite', () => {
     test('DELETE /books/:id with incorrect data', async () => {
         let id = 999; // Replace with an incorrect book id
         try {
+            console.log("DELETE TEST\n\n\n");
             const response = await axios.delete(`/books/${id}`);
+            console.log("RESPONSE:"+response.status);
             expect(response.status).toBe(404);
             console.log("SHOULD NOT PRINT: " + response.data); // Debug statement
         } catch (error) {

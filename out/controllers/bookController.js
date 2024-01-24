@@ -1,4 +1,5 @@
 import Book from '../models/Book.js';
+import Author from '../models/Author.js';
 const getAllBooks = async (req, res) => {
     try {
         const books = await Book.findAll();
@@ -8,7 +9,6 @@ const getAllBooks = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-const bookList = [];
 const getBookById = async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
@@ -25,6 +25,11 @@ const getBookById = async (req, res) => {
 };
 const createBook = async (req, res) => {
     try {
+        const author = await Author.findById(req.body.author_id);
+        if (!author) {
+            res.status(404).json({ message: 'Author not found' });
+            return;
+        }
         const book = await Book.create(req.body);
         console.log("BOOK: " + book.lastID);
         res.status(201).json(book);
@@ -33,28 +38,17 @@ const createBook = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-/*const updateBook = async (req: Request, res: Response) => {
-    try {
-        const book = await Book.update(req.body, {
-            where: {
-                id: req.params.id
-            }
-        });
-        res.status(201).json(book);
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
-};*/
 const deleteBook = async (req, res) => {
     try {
-        await Book.delete({
-            where: {
-                id: req.params.id
-            }
-        });
-        let item = await Book.findById(req.params.id);
-        console.log("Item" + item.data);
-        res.status(204).json(item.data);
+        const book = await Book.findById(req.params.id);
+        console.log("BOOK: " + book);
+        if (book == undefined) {
+            res.status(500).json({ message: 'Book not found' });
+            return;
+        }
+        await Book.delete(req.params.id);
+        console.log("Flag00");
+        res.status(204).json("item.data");
     }
     catch (error) {
         console.log("Fail with code 0");
