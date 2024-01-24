@@ -201,7 +201,7 @@ describe('Book Suite', () => {
         expect(response.data.lastID).toEqual(6);
     });
 
-    test('POST /books with incorrect data', async () => {
+    test('POST /books with incorrect author id', async () => {
         const data = { id: 5, author_id: 999, title: 'Book 1', pub_year: '2020', genre: 'Fiction' };
         try {
             const response = await axios.post('/books', data);
