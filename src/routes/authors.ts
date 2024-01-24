@@ -4,13 +4,13 @@ import { getAllAuthors, getAuthorById, createAuthor, deleteAuthor } from '../con
 const router = express.Router();
 
 // GET all authors
-router.get('/', getAllAuthors);
+router.get('/all', getAllAuthors);
 
 // GET a single author by id
 router.get('/:id', getAuthorById);
 
 // POST a new author
-router.post('/', createAuthor);
+router.post('/post', createAuthor);
 
 // PUT update an existing author
 //router.put('/:id', updateAuthor);

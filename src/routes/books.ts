@@ -10,7 +10,7 @@ router.get('/', getAllBooks);
 router.get('/:id', getBookById);
 
 // POST a new book
-router.post('/', createBook);
+router.post('/post', createBook);
 
 // PUT update an existing book
 //router.put('/:id', updateBook);

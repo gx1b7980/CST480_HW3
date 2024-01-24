@@ -1,44 +1,48 @@
 import express from 'express';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-import * as url from 'url';
 import authorsRouter from './routes/authors.js';
 import booksRouter from './routes/books.js';
 import { v4 as uuidv4 } from 'uuid';
+import Author from './models/Author.js';
 const app = express();
 app.use(express.json());
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-const dbfile = `${__dirname}/database.db`;
-// Open the database
-export const db = await open({
-    filename: dbfile,
-    driver: sqlite3.Database
+let author = [{ id: 9, name: 'John Doe', bio: 'Lorem ipsum dolor sit amet' },];
+// Start the server
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}/`);
 });
-// Enable foreign key constraints
-await db.exec('PRAGMA foreign_keys = ON');
+sqlite3.verbose(); // enable better error messages
+let db = await open({
+    filename: "./database.db",
+    driver: sqlite3.Database,
+}); // Enable foreign key constraints
+//await db.exec('PRAGMA foreign_keys = ON');
 // Use routes
 app.use('/authors', authorsRouter);
 app.use('/books', booksRouter);
 // Setup database and store the db connection
-// Authors Routes
-app.get('/authors', async (req, res) => {
-    const { name } = req.query;
-    let authors = [];
-    if (name) {
-        // Filter authors by name
-        authors = await db.all('SELECT * FROM authors WHERE name = ?', name);
+// Authors Routes 
+app.get("/authors/all", async (req, res) => {
+    try {
+        const authors = await Author.findAll();
+        res.status(200).json(authors);
     }
-    else {
-        // Fetch all authors
-        authors = await db.all('SELECT * FROM authors');
+    catch (error) {
+        res.status(0);
     }
-    res.json({ authors });
 });
-app.get('/authors/:id', async (req, res) => {
-    const { id } = req.params;
+app.get("/authors/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    console.log("ID: " + id);
+    const result = await db.get("SELECT * FROM authors WHERE id = ?", [1]);
+    console.log(result);
     try {
         // Fetch author by ID from the database
-        const author = await db.get('SELECT * FROM authors WHERE id = ?', id);
+        console.log("Flag1");
+        const result = await db.get("SELECT * FROM authors WHERE id = ?", [id]);
+        console.log("Flag2");
         if (author) {
             res.json({ author });
             res.status(201).json({ message: "Found Author" });
@@ -48,15 +52,14 @@ app.get('/authors/:id', async (req, res) => {
         }
     }
     catch (error) {
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(600).json({ message: 'Internal server error' });
     }
 });
 app.post('/authors', async (req, res) => {
     try {
         const { name, bio } = req.body;
-        const authorId = uuidv4();
-        // Save the author details to the database using the generated ID
-        await db.run('INSERT INTO authors (id, name, bio) VALUES (?, ?, ?)', uuidv4(), name, bio);
+        const authorId = Math.floor(Math.random() * 1000); // Generate a random integer between 0 and 999
+        await db.run('INSERT INTO authors (id, name, bio) VALUES (?, ?, ?)', authorId, name, bio);
         res.status(201).json({ message: "Created new author", authorId });
     }
     catch (error) {
@@ -85,7 +88,7 @@ app.delete('/authors/:id', async (req, res) => {
         }
     }
     catch (error) {
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(600).json({ message: 'Internal server error' });
     }
 });
 // Books Routes
@@ -196,10 +199,5 @@ app.delete('/books/:id', async (req, res) => {
     catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
-});
-// Start the server
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}/`);
 });
 export default app;

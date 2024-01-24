@@ -3,21 +3,7 @@ import { Request, Response } from 'express';
 
 const getAllBooks = async (req: Request, res: Response) => {
     try {
-        const { id, pub_year, author_id } = req.query;
-        let books:any = {};
-
-        if (id) {
-            books = await Book.findById(id);
-        }
-
-        if (pub_year) {
-            books = await Book.findByPubYear(id);
-        }
-
-        if (author_id) {
-            books = await Book.findByAuthorId(id);
-        }
-
+        const books = await Book.findAll();
         res.status(200).json(books);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -41,6 +27,7 @@ const getBookById = async (req: Request, res: Response) => {
 const createBook = async (req: Request, res: Response) => {
     try {
         const book = await Book.create(req.body);
+        console.log("BOOK: "+book.lastID);
         res.status(201).json(book);
     } catch (error: any) {
         res.status(500).json({ message: error.message });

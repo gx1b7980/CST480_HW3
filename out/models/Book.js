@@ -1,24 +1,20 @@
-import { db } from '../server.js';
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
+let db = await open({
+    filename: "../database.db",
+    driver: sqlite3.Database,
+});
 class Book {
-    static async findAll(filter) {
+    static async getAll() {
+        // Fetch all authors from the database
+        const result = db.all("SELECT * FROM authors");
+        return result;
+    }
+    static async findAll() {
         let query = `SELECT * FROM books`;
-        if (filter) {
-            const { id, pub_year, author_id } = filter;
-            const conditions = [];
-            if (id) {
-                conditions.push(`id = ${id}`);
-            }
-            if (pub_year) {
-                conditions.push(`pub_year = ${pub_year}`);
-            }
-            if (author_id) {
-                conditions.push(`author_id = ${author_id}`);
-            }
-            if (conditions.length > 0) {
-                query += ` WHERE ${conditions.join(' AND ')}`;
-            }
-        }
-        const rows = await db.all(query);
+        console.log("Flag1");
+        let rows = await db.all(query);
+        console.log("ROWS" + rows);
         return rows;
     }
     static async findById(id) {
