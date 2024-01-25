@@ -1,0 +1,25 @@
+/* Home.css */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh; /* Make the container take up at least 80% of the viewport height */
+    padding: 2rem;
+    background-color: #f8f9fa; /* A light grey background */
+    color: #212529; /* Dark grey text for contrast */
+  }
+  
+  .home-container h1 {
+    margin-bottom: 1rem;
+    font-size: 2.5rem; /* Larger font size for the main heading */
+    color: #007bff; /* Bootstrap primary color for reference */
+  }
+  
+  .home-container p {
+    font-size: 1.2rem; /* Slightly larger font size for the paragraph */
+    line-height: 1.5; /* Add more space between lines for readability */
+    max-width: 600px; /* Set a max-width for the paragraph to maintain optimal line length */
+    text-align: center; /* Center-align the text */
+  }
+  

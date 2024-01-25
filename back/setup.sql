@@ -19,4 +19,6 @@ INSERT INTO authors(id, a_name, bio) VALUES ('31', 'George R.R. Martin', 'George
 INSERT INTO authors(id, a_name, bio) VALUES ('41', 'JOSEPH. Tolkien', 'John Ronald Reuel Tolkien was an English writer, poet, philologist, and academic, best known as the author of the high fantasy works The Hobbit and The Lord of the Rings.');
 INSERT INTO books(id, author_id, title, pub_year, genre) VALUES ('1', '11', 'Harry Potter and the Philosopher''s Stone', '1997', 'Fantasy');
 INSERT INTO books(id, author_id, title, pub_year, genre) VALUES ('2', '11', 'Harry Potter and the Chamber of Secrets', '1998', 'Fantasy');
-INSERT INTO books(id, author_id, title, pub_year, genre) VALUES ('3', '11', 'Harry Potter and the Prisoner of Azkaban', '1999', 'Fantasy');
+INSERT INTO books(id, author_id, title, pub_year, genre) VALUES ('3', '21', ' A Song of Ice and Fire', '1999', 'Adventure');
+INSERT INTO books(id, author_id, title, pub_year, genre) VALUES ('4', '41', 'Harry Potter and the Goblet of Fire', '2000', 'Fantasy');
+INSERT INTO books(id, author_id, title, pub_year, genre) VALUES ('5', '31', 'The Hobbit and The Lord of the Rings.', '2003', 'Thriller');

@@ -4,6 +4,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Repository from "./Components/repository";
 import Layout from "./Components/Layout";
 import NotFound from "./Components/notFound";
+import Home from "./Components/Home";
+import BookTable from "./Components/BookTable";
 
 
 let router = createBrowserRouter([
@@ -12,7 +14,7 @@ let router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element:<NotFound />,
+                element:<Home />,
             },
             {
                 path: "*",
@@ -21,7 +23,11 @@ let router = createBrowserRouter([
             {
                 path: "/repository",
                 element: <Repository />,
-            },   
+            },
+            {
+                path: "/BTable",
+                element: <BookTable />,
+            }   
         ],
     },
 ]);

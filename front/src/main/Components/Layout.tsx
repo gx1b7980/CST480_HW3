@@ -1,11 +1,12 @@
 import { Link, Outlet } from "react-router-dom";
-//import "./Layout.css";
+import "./Layout.css";
 
 function Header() {
     return (
         <>
             <Link to="/">Home</Link>
-            <Link to="/repository">Database Info</Link>
+            <Link to="/repository">Full Default Database</Link>
+            <Link to="/BTable">Book Table</Link>
         </>
     );
 }
