@@ -142,7 +142,7 @@ describe('Author Suite', () => {
 describe('Book Suite', () => {
     test('GET /books/:id', async() => {
         console.log("BOOK TESTS START");
-        let id = 5; // Replace with the desired book id
+        let id = 5; 
         const result = await db.get("SELECT * FROM books WHERE id = ?", [id]);
         console.log("GET 1 RESPONSE: "+result);
         const response = await axios.get(`/books/${id}`);
@@ -158,7 +158,7 @@ describe('Book Suite', () => {
 
     test('GET /books/:id with incorrect id', async() => {
         try {
-            let id = 999; // Replace with the incorrect book id
+            let id = 999;
             const response = await axios.get(`/books/${id}`);
             console.log("GET 3 Response: " + response.status); // Debug statement
             expect(response.status).toBe(404);
@@ -215,13 +215,13 @@ describe('Book Suite', () => {
     });
 
     test('DELETE /books/:id', async() => {
-        let id = 5; // Replace with the desired book id
+        let id = 5; 
         const response = await axios.delete(`/books/${id}`);
         expect(response.status).toBe(204);
     });
 
     test('DELETE /books/:id with incorrect data', async () => {
-        let id = 999; // Replace with an incorrect book id
+        let id = 999; 
         try {
             console.log("DELETE TEST\n\n\n");
             const response = await axios.delete(`/books/${id}`);

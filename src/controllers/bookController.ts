@@ -2,7 +2,8 @@ import Book from '../models/Book.js';
 import Author from '../models/Author.js';
 import { Request, Response } from 'express';
 
-const getAllBooks = async (req: Request, res: Response) => {
+const getAllBooks = async (req: Request, res: Response) => { 
+    //Still need to implement fallback where the book list is empty
     try {
         const books = await Book.findAll();
         res.status(200).json(books);

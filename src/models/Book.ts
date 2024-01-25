@@ -1,21 +1,17 @@
-import axios, { AxiosError } from "axios";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
-import { z } from "zod";
-import { error } from "console";
-import { json } from "stream/consumers";
-
 let db = await open({
     filename: "../database.db",
     driver: sqlite3.Database,
 });
 
 class Book {
+
     static async getAll() {
-        // Fetch all authors from the database
         const result = db.all("SELECT * FROM authors");
         return result;
     }
+
     static async findAll() {
         let query = `SELECT * FROM books`;
         console.log("Flag1");
@@ -30,6 +26,8 @@ class Book {
         return row;
     }
 
+    //To implement the following functions later for HW2
+    /*
     static async findByAuthorId(author_id:any) {
         // Fetch all books by author id from the database
         const rows = await db.all(`SELECT * FROM books WHERE author_id = ?`, [author_id]);
@@ -48,21 +46,21 @@ class Book {
         return rows;
     }
 
+    static async update(id:any, data:any) {
+        
+        const result = await db.run(`UPDATE books SET author_id = ?, title = ?, pub_year = ?, genre = ? WHERE id = ?`, [data.author_id, data.title, data.pub_year, data.genre, id]);
+        return result;
+    }
+
+    */
+
     static async create(data:any) {
         // Create a new book in the database
         const result = await db.run(`INSERT INTO books (id, author_id, title, pub_year, genre) VALUES (?, ?, ?, ?, ?)`, [data.id, data.author_id, data.title, data.pub_year, data.genre]);
         return result;
     }
 
-    /*static async update(id:any, data:any) {
-        
-        const result = await db.run(`UPDATE books SET author_id = ?, title = ?, pub_year = ?, genre = ? WHERE id = ?`, [data.author_id, data.title, data.pub_year, data.genre, id]);
-        return result;
-    }*/
-
-    static async delete(id:any) {
-        // Delete a book from the database
-        
+    static async delete(id:any) {  
         const row = await db.get(`SELECT * FROM books WHERE id = ?`, [id]);
         console.log(row);
         const result = await db.run(`DELETE FROM books WHERE id = ?`, [id]);

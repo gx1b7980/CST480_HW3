@@ -1,8 +1,5 @@
-import axios, { AxiosError } from "axios";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
-import { z } from "zod";
-import { error } from "console";
 
 let db = await open({
     filename: "../database.db",
@@ -33,17 +30,13 @@ class Author {
         let bio = data.bio;
         let result; 
         try{
-        result = await db.run(`INSERT INTO authors(id, a_name, bio) VALUES(?, ?, ?)`, [id, a_name, bio]);
+            result = await db.run(`INSERT INTO authors(id, a_name, bio) VALUES(?, ?, ?)`, [id, a_name, bio]);
         }catch(error){
             console.error(error);
         }
-        
         return result;
         
     }
-
-
-
 
     static async delete(id:any) {
         // Delete an author from the database

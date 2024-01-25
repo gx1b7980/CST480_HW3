@@ -38,6 +38,7 @@ const createAuthor = async (req: Request, res: Response) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 /*
 const updateAuthor = async (req: Request, res: Response) => {
     try {
