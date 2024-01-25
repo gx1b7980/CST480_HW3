@@ -15,6 +15,7 @@ function BookTable() {
     let [bookList, setBookList] = useState<bookList[]>([]);
     let [authorTable, setAuthorList] = useState<authorList[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [searchCategory, setSearchCategory] = useState('');
     useEffect(() => {
         (async () => {
             try{
@@ -32,12 +33,24 @@ function BookTable() {
     return (
         <>
 
-            <h1>Book Database with Title Searching</h1>
-            <h3>Search by Book Title</h3>
-            <div>
+            <h1>Book Database</h1>
+            <b>Use the following DropDown to select the category you want to search in</b>
+            <div id="Category Box">
+                <select 
+                    value={searchCategory}
+                    onChange={(e) => setSearchCategory(e.target.value)}>
+                    <option value="title">Title</option>
+                    <option value="author">Author</option>
+                    <option value="genre">Genre</option>
+                    <option value="pub_year">Year</option>
+                </select>
+            </div>
+            {console.log(searchCategory)}
+            <b>Use the following search box to search for a book</b>
+            <div id="Search Box">
                 <input
                     type="text"
-                    placeholder="Search by Book Title..."
+                    placeholder="Search...."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -55,7 +68,25 @@ function BookTable() {
                     </thead>
                     <tbody>
                         {bookList
-                        .filter(({ title }) => title.toLowerCase().includes(searchTerm.toLowerCase()))
+                        .filter(({
+                            title, author_id, genre, pub_year
+                        }) => {
+                            if (searchCategory === "title") {
+                                return title.toLowerCase().includes(searchTerm.toLowerCase());
+                            }
+                            else if (searchCategory === "author") {
+                                return authorTable.find(({ id }) => id === author_id)?.a_name.toLowerCase().includes(searchTerm.toLowerCase());
+                            }
+                            else if (searchCategory === "genre") {
+                                return genre.toLowerCase().includes(searchTerm.toLowerCase());
+                            }
+                            else if (searchCategory === "pub_year") {
+                                return pub_year.toString().includes(searchTerm);
+                            }
+                            else {
+                                return title.toLowerCase().includes(searchTerm.toLowerCase());
+                            }
+                        })
                         .map(({
                             id, author_id, title, pub_year, genre
                         }) => (
