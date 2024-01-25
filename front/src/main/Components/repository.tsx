@@ -30,9 +30,7 @@ function Repository() {
                 console.log(authorTable);
                 console.log("BIGCHECK");
                 
-                let {
-                    data: { bookList },
-                } = await axios.get("/api/books/");
+                let {data: bookList} = await axios.get("/api/books/");
                 setBookList(bookList);
                 
             }
@@ -45,8 +43,6 @@ function Repository() {
     return (
         
         <>
-            
-            <h4>console.log("HAHA")</h4>
             <h2>Author Database Info</h2>
             
                 <table>
@@ -94,17 +90,20 @@ function Repository() {
                             <th>Book Year</th>
                         </tr>
                     </thead>
-                    {/*<tbody>
-                        {bookList.map((books) => (
-                            <tr key={books.id}>
-                                <td>{books.id}</td>
-                                <td>{books.title}</td>
-                                <td>{books.author_id}</td>
-                                <td>{books.genre}</td>
-                                <td>{books.pub_year}</td>
+                    <tbody>
+                        {bookList
+                        .map(({
+                            id, author_id, title, pub_year, genre
+                        }) => (
+                            <tr key={id}>
+                                <td key={`${id}-id`}>{id}</td>
+                                <td key={`${id}-title`}>{title}</td>
+                                <td key={`${id}-author_id`}>{author_id}</td>
+                                <td key={`${id}-genre`}>{genre}</td>
+                                <td key={`${id}-pub_year`}>{pub_year}</td>
                             </tr>
                         ))}
-                        </tbody>*/}
+                        </tbody>
                 </table>
             </div>
             </>
