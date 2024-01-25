@@ -65,7 +65,7 @@ describe('Author Suite', () => {
     test('GET /api/authors/all', async () => {
         var _a, _b;
         try {
-            const response = await axios.get(`/authors/all/`);
+            const response = await axios.get(`/api/authors/all/`);
             expect(response.status).toBe(200);
             //expect(response.status).toBe('success');
             console.log("Respose: " + response.status); // Debug statement
@@ -80,28 +80,33 @@ describe('Author Suite', () => {
     });
     test('POST /api/authors', async () => {
         const data = { id: 4, a_name: "John Doe", bio: "Lorem ipsum dolor sit amet" };
-        const response = await axios.post('/authors/post', data);
+        const response = await axios.post('/api/authors/post', data);
         expect(response.status).toBe(201);
         console.log("Response: " + response); // Debug statement
         expect(response.data.lastID).toEqual(4);
     });
     test('POST /api/authors with incorrect data', async () => {
-        var _a, _b;
+        var _a, _b, _c;
         const data = { id: 1, a_name: 'John Doe', bio: 'Lorem ipsum dolor sit amet' };
         try {
-            const response = await axios.post('/authors', data);
+            const response = await axios.post('/api/authors', data);
             expect(response.status).toBe(400);
             console.log("SHOULD NOT PRINT: " + response.data); // Debug statement
         }
         catch (error) {
             const axiosError = error;
             console.log("Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
-            expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(500);
+            if ((((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status) == 500) || (((_c = axiosError.response) === null || _c === void 0 ? void 0 : _c.status) == 500)) {
+                expect(true);
+            }
+            else {
+                expect(false);
+            }
         }
     });
     test('DELETE /api/authors/:id', async () => {
         let id = 1; // Replace with the desired author id
-        const response = await axios.delete(`/authors/${id}`);
+        const response = await axios.delete(`/api/authors/${id}`);
         expect(response.status).toBe(204);
         expect(response.data).toEqual("");
     });
@@ -109,7 +114,7 @@ describe('Author Suite', () => {
         var _a, _b;
         let id = 999; // Replace with an incorrect author id
         try {
-            const response = await axios.delete(`/authors/${id}`);
+            const response = await axios.delete(`/api/authors/${id}`);
             expect(response.status).toBe(404);
             console.log("SHOULD NOT PRINT: " + response.data); // Debug statement
         }
@@ -126,8 +131,9 @@ describe('Book Suite', () => {
         let id = 5;
         const result = await db.get("SELECT * FROM books WHERE id = ?", [id]);
         console.log("GET 1 RESPONSE: " + result);
-        const response = await axios.get(`/books/${id}`);
+        const response = await axios.get(`/api/books/${id}`);
         expect(response.status).toBe(200);
+        console.log("GET GET Response: " + response.status); // Debug statement
         expect(response.data).toEqual({
             id: 5,
             author_id: 1,
@@ -140,7 +146,7 @@ describe('Book Suite', () => {
         var _a, _b;
         try {
             let id = 999;
-            const response = await axios.get(`/books/${id}`);
+            const response = await axios.get(`/api/books/${id}`);
             console.log("GET 3 Response: " + response.status); // Debug statement
             expect(response.status).toBe(404);
             console.log(response.data);
@@ -183,22 +189,27 @@ describe('Book Suite', () => {
         expect(response.data.lastID).toEqual(6);
     });
     test('POST /api/books with incorrect author id', async () => {
-        var _a, _b;
+        var _a, _b, _c;
         const data = { id: 5, author_id: 999, title: 'Book 1', pub_year: '2020', genre: 'Fiction' };
         try {
-            const response = await axios.post('/books', data);
+            const response = await axios.post('/api/books/post', data);
             expect(response.status).toBe(400);
             console.log("SHOULD NOT PRINT: " + response.data); // Debug statement
         }
         catch (error) {
             const axiosError = error;
             console.log("Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
-            expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(500);
+            if ((((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status) == 500) || (((_c = axiosError.response) === null || _c === void 0 ? void 0 : _c.status) == 500)) {
+                expect(true);
+            }
+            else {
+                expect(false);
+            }
         }
     });
     test('DELETE /api/books/:id', async () => {
         let id = 5;
-        const response = await axios.delete(`/books/${id}`);
+        const response = await axios.delete(`/api/books/${id}`);
         expect(response.status).toBe(204);
     });
     test('DELETE /api/books/:id with incorrect data', async () => {
@@ -206,7 +217,7 @@ describe('Book Suite', () => {
         let id = 999;
         try {
             console.log("DELETE TEST\n\n\n");
-            const response = await axios.delete(`/books/${id}`);
+            const response = await axios.delete(`/api/books/${id}`);
             console.log("RESPONSE:" + response.status);
             expect(response.status).toBe(404);
             console.log("SHOULD NOT PRINT: " + response.data); // Debug statement

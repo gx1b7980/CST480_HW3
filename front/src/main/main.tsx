@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-//import Repository from "./Components/repository";
+import Repository from "./Components/repository";
 import Layout from "./Components/Layout";
 import NotFound from "./Components/notFound";
+
 
 let router = createBrowserRouter([
     {
@@ -18,8 +19,8 @@ let router = createBrowserRouter([
                 element: <NotFound />,
             },
             {
-                path: "/widgets",
-                element: <NotFound />,
+                path: "/repository",
+                element: <Repository />,
             },   
         ],
     },

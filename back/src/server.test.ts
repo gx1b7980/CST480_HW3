@@ -83,7 +83,7 @@ describe('Author Suite', () => {
 
     test('GET /api/authors/all', async() => {
             try {
-                const response = await axios.get(`/authors/all/`);
+                const response = await axios.get(`/api/authors/all/`);
                 expect(response.status).toBe(200);
                 //expect(response.status).toBe('success');
                 console.log("Respose: " + response.status); // Debug statement

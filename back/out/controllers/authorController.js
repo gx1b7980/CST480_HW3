@@ -4,7 +4,8 @@ const getAllAuthors = async (req, res) => {
     //res.status(200).json(author);
     try {
         const authors = await Author.findAll();
-        return res.json({ widget: authors });
+        console.log("MMMM" + authors.length);
+        return res.json(authors);
         console.log(authors);
     }
     catch (error) {

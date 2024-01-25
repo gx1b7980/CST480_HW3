@@ -3,8 +3,12 @@ import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import authorsRouter  from './routes/authors.js'; 
 import booksRouter from './routes/books.js';
+import { funct } from './checker.js';
+import cors from 'cors';
+
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 let author = [{ id: 9, name: 'John Doe', bio: 'Lorem ipsum dolor sit amet' },]
 
@@ -20,7 +24,8 @@ let db = await open({
     driver: sqlite3.Database,
 
 });
-
+let A1 = await funct();
+//console.log(A1.data);
 // Use routes
 app.use('/api/authors', authorsRouter);
 app.use('/api/books', booksRouter);
