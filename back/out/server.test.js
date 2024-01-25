@@ -40,7 +40,7 @@ describe('Author Suite', () => {
         let id = 1; // Replace with the desired author id
         const result = await db.get("SELECT * FROM authors WHERE id = ?", [id]);
         console.log(result);
-        const response = await axios.get(`/authors/${id}`);
+        const response = await axios.get(`/api/authors/${id}`);
         expect(response.status).toBe(200);
         expect(response.data).toEqual({
             id: A1,
@@ -52,7 +52,7 @@ describe('Author Suite', () => {
         var _a, _b;
         let id = 999; // Replace with an incorrect author id
         try {
-            const response = await axios.get(`/authors/${id}`);
+            const response = await axios.get(`/api/authors/${id}`);
             expect(response.status).toBe(404);
             console.log("Should not print: " + response.data); // Debug statement
         }
@@ -155,7 +155,7 @@ describe('Book Suite', () => {
     test('GET /api/books/all', async () => {
         var _a, _b;
         try {
-            const response = await axios.get(`/books/`);
+            const response = await axios.get(`/api/books/`);
             console.log("GET 2Response: " + response.status); // Debug statement
             expect(response.status).toBe(200);
             console.log(response.data);
@@ -177,7 +177,7 @@ describe('Book Suite', () => {
             genre: 'Mystery'
         };
         console.log("POST TEST\n\n\n");
-        const response = await axios.post('/books/post', data);
+        const response = await axios.post('/api/books/post', data);
         expect(response.status).toBe(201);
         console.log("POST RESPONSE: " + response.status);
         expect(response.data.lastID).toEqual(6);
