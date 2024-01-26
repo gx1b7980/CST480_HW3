@@ -21,6 +21,12 @@ class Author {
         return row;
     }
 
+    static async findByName(a_name: string) {
+        let row;
+        row = await db.get("SELECT * FROM authors WHERE a_name = ?", [a_name]);
+        return row;
+    }
+
     static async create(data:any) {
         // Create a new author in the database
         console.log(data.id);

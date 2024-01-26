@@ -7,6 +7,7 @@ function Header() {
             <Link to="/">Home</Link>
             <Link to="/repository">Full Default Database</Link>
             <Link to="/BTable">Book Table</Link>
+            <Link to="/AddBook">Add Book</Link>
         </>
     );
 }

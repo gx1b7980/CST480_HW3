@@ -12,6 +12,25 @@ const getAllAuthors = async (req, res) => {
         res.status(404);
     }
 };
+const getAuthorByName = async (req, res) => {
+    console.log(req.params.name);
+    try {
+        const author = await Author.findByName(req.params.a_name);
+        if (author) {
+            const a_id = author.id;
+            res.status(200).json(a_id);
+            console.log("Flag VAO" + a_id);
+        }
+        else {
+            res.status(404).json({ message: 'Author not found' });
+            console.log("404");
+        }
+    }
+    catch (error) {
+        console.log("Unknown error");
+        res.status(900).json({ message: "Unknown error" });
+    }
+};
 const getAuthorById = async (req, res) => {
     try {
         const author = await Author.findById(req.params.id);
@@ -67,4 +86,4 @@ const deleteAuthor = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-export { getAllAuthors, getAuthorById, createAuthor, deleteAuthor };
+export { getAllAuthors, getAuthorById, createAuthor, deleteAuthor, getAuthorByName };
