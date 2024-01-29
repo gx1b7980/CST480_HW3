@@ -48,18 +48,11 @@ function Repository() {
                 <table>
                     <thead>
                         <tr>
-                            <th>AuthorID</th>
+                            <th>Author ID</th>
                             <th>Author Name</th>
                             <th>Author Bio</th>
                         </tr>
                     </thead>
-                    {/*<tbody>
-                            <tr>
-                                <td>R1{authorTable.length}</td>
-                                <td>R1R1</td>
-                                <td>R1R1R1</td>
-                            </tr>
-                    </tbody>*/}
                     <tbody>
                         {authorTable
                             .map(({ 
@@ -98,7 +91,10 @@ function Repository() {
                             <tr key={id}>
                                 <td key={`${id}-id`}>{id}</td>
                                 <td key={`${id}-title`}>{title}</td>
-                                <td key={`${id}-author_id`}>{author_id}</td>
+                                <td key={`${id}-author_id`}>
+                                    {
+                                        authorTable.find(({ id }) => id === author_id)?.a_name
+                                    }</td>
                                 <td key={`${id}-genre`}>{genre}</td>
                                 <td key={`${id}-pub_year`}>{pub_year}</td>
                             </tr>
