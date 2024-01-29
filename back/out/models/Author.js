@@ -30,7 +30,7 @@ class Author {
         let bio = data.bio;
         let result;
         try {
-            result = await db.run(`INSERT INTO authors(id, a_name, bio) VALUES(?, ?, ?)`, [id, a_name, bio]);
+            result = await db.run(`INSERT INTO authors(a_name, bio) VALUES(?, ?)`, [a_name, bio]);
         }
         catch (error) {
             console.error(error);

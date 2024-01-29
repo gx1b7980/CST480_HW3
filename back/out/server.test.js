@@ -11,24 +11,14 @@ let host = "localhost";
 let protocol = "http";
 let baseURL = `${protocol}://${host}:${port}`;
 axios.defaults.baseURL = baseURL;
-let A1 = 1;
-let A2 = 2;
-let A3 = 3;
-let authors = [
-    { id: 1, a_name: "John Doe", bio: "Lorem ipsum dolor sit amet" },
-    { id: A2, name: 'Jane Smith', bio: 'Consectetur adipiscing elit' },
-    //{ id: A2, name: 'Alice Johnson', bio: 'Sed do eiusmod tempor incididunt' },
-];
-const books = [
-    { id: 5, author_id: A1, title: 'Book 1', pub_year: '2020', genre: 'Fiction' },
-];
+let a_id;
+let b_id;
 beforeEach(async () => {
-    for (let { id, a_name, bio } of authors) {
-        await db.run("INSERT INTO authors(id, a_name, bio) VALUES(?, ?, ?)", [id, a_name, bio]);
-    }
-    for (let { id, author_id, title, pub_year, genre } of books) {
-        await db.run("INSERT INTO books(id, author_id, title, pub_year, genre) VALUES(?, ?, ?, ?, ?)", [id, author_id, title, pub_year, genre]);
-    }
+    await db.run("DELETE FROM authors");
+    await db.run("DELETE FROM books");
+    a_id = (await db.run("INSERT INTO authors(a_name, bio) VALUES(?, ?)", ["John Doe", "Lorem ipsum dolor sit amet"])).lastID;
+    b_id = (await db.run("INSERT INTO books(author_id, title, pub_year, genre) VALUES(?, ?, ?, ?)", [a_id, 'Book 1', "2020", "Fiction"])).lastID;
+    console.log("Inserted");
 });
 afterEach(async () => {
     await db.run("DELETE FROM authors");
@@ -37,13 +27,12 @@ afterEach(async () => {
 });
 describe('Author Suite', () => {
     test('GET /api/authors/:id', async () => {
-        let id = 1; // Replace with the desired author id
-        const result = await db.get("SELECT * FROM authors WHERE id = ?", [id]);
-        console.log(result);
-        const response = await axios.get(`/api/authors/${id}`);
+        /*const result = await db.get("SELECT * FROM authors WHERE id = ?", [a_id]);
+        console.log(result);*/
+        const response = await axios.get(`/api/authors/${a_id}`);
         expect(response.status).toBe(200);
         expect(response.data).toEqual({
-            id: A1,
+            id: a_id,
             a_name: 'John Doe',
             bio: 'Lorem ipsum dolor sit amet'
         });
@@ -65,29 +54,35 @@ describe('Author Suite', () => {
     test('GET /api/authors/all', async () => {
         var _a, _b;
         try {
+            console.log("GET ALL TEST\n\n\n");
             const response = await axios.get(`/api/authors/all/`);
             expect(response.status).toBe(200);
             //expect(response.status).toBe('success');
-            console.log("Respose: " + response.status); // Debug statement
-            expect(response.data.widget).toHaveLength(2);
+            console.log("Respose STATUS: " + response.status); // Debug statement
+            console.log("LENGTH" + response.data.length);
+            expect(response.data).toHaveLength(1);
             console.log("Length Matches");
+            console.log("GET ALL TEST\n\n\n");
         }
         catch (error) {
+            console.log("GET ALL ERROR\n\n\n");
             const axiosError = error;
-            console.log("Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.data)); // Debug statement
+            console.log("Error: " + ((_a = axiosError.response) === null || _a === void 0 ? void 0 : _a.status)); // Debug statement
             expect((_b = axiosError.response) === null || _b === void 0 ? void 0 : _b.status).toBe(404);
         }
     });
     test('POST /api/authors', async () => {
-        const data = { id: 4, a_name: "John Doe", bio: "Lorem ipsum dolor sit amet" };
+        const data = { a_name: "John Doe", bio: "Lorem ipsum dolor sit amet" };
+        await db.run("DELETE FROM authors");
         const response = await axios.post('/api/authors/post', data);
         expect(response.status).toBe(201);
         console.log("Response: " + response); // Debug statement
-        expect(response.data.lastID).toEqual(4);
+        expect(response.data.lastID).toEqual(1);
     });
     test('POST /api/authors with incorrect data', async () => {
         var _a, _b, _c;
-        const data = { id: 1, a_name: 'John Doe', bio: 'Lorem ipsum dolor sit amet' };
+        const data = { a_name: 'John Doe', bio: 'Lorem ipsum dolor sit amet' };
+        await db.run("DELETE FROM authors");
         try {
             const response = await axios.post('/api/authors', data);
             expect(response.status).toBe(400);
@@ -128,15 +123,14 @@ describe('Author Suite', () => {
 describe('Book Suite', () => {
     test('GET /api/books/:id', async () => {
         console.log("BOOK TESTS START");
-        let id = 5;
-        const result = await db.get("SELECT * FROM books WHERE id = ?", [id]);
+        const result = await db.get("SELECT * FROM books WHERE id = ?", [b_id]);
         console.log("GET 1 RESPONSE: " + result);
-        const response = await axios.get(`/api/books/${id}`);
+        const response = await axios.get(`/api/books/${b_id}`);
         expect(response.status).toBe(200);
         console.log("GET GET Response: " + response.status); // Debug statement
         expect(response.data).toEqual({
-            id: 5,
-            author_id: 1,
+            id: b_id,
+            author_id: a_id,
             title: 'Book 1',
             pub_year: '2020',
             genre: 'Fiction'
@@ -175,9 +169,9 @@ describe('Book Suite', () => {
         }
     });
     test('POST /api/books', async () => {
+        await db.run("DELETE FROM books");
         const data = {
-            id: 6,
-            author_id: 2,
+            author_id: a_id,
             title: 'Book 2',
             pub_year: '2022',
             genre: 'Mystery'
@@ -186,7 +180,7 @@ describe('Book Suite', () => {
         const response = await axios.post('/api/books/post', data);
         expect(response.status).toBe(201);
         console.log("POST RESPONSE: " + response.status);
-        expect(response.data.lastID).toEqual(6);
+        expect(response.data.lastID).toEqual(1);
     });
     test('POST /api/books with incorrect author id', async () => {
         var _a, _b, _c;
@@ -208,8 +202,7 @@ describe('Book Suite', () => {
         }
     });
     test('DELETE /api/books/:id', async () => {
-        let id = 5;
-        const response = await axios.delete(`/api/books/${id}`);
+        const response = await axios.delete(`/api/books/${b_id}`);
         expect(response.status).toBe(204);
     });
     test('DELETE /api/books/:id with incorrect data', async () => {

@@ -50,7 +50,7 @@ class Book {
     */
     static async create(data) {
         // Create a new book in the database
-        const result = await db.run(`INSERT INTO books (id, author_id, title, pub_year, genre) VALUES (?, ?, ?, ?, ?)`, [data.id, data.author_id, data.title, data.pub_year, data.genre]);
+        const result = await db.run(`INSERT INTO books (author_id, title, pub_year, genre) VALUES (?, ?, ?, ?)`, [data.author_id, data.title, data.pub_year, data.genre]);
         return result;
     }
     static async delete(id) {
