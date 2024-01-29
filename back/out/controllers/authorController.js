@@ -9,20 +9,21 @@ const getAllAuthors = async (req, res) => {
         return res.status(200).json(authors);
     }
     catch (error) {
-        res.status(404);
+        return res.status(404);
     }
 };
 const getAuthorByName = async (req, res) => {
     console.log(req.params.name);
     try {
-        const author = await Author.findByName(req.params.a_name);
+        const author = await Author.findByName(req.params.name);
+        console.log("LOOKING FOR: " + req.params.name);
         if (author) {
             const a_id = author.id;
             res.status(200).json(a_id);
             console.log("Flag VAO" + a_id);
         }
         else {
-            res.status(404).json({ message: 'Author not found' });
+            return res.status(404);
             console.log("404");
         }
     }

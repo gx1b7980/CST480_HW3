@@ -20,6 +20,7 @@ function BookTable() {
         (async () => {
             try{
                 let {data: authorTable} = await axios.get("/api/authors/all");
+                console.log("ATABLE IS"+authorTable.length);
                 setAuthorList(authorTable);
                 let {data: bookList} = await axios.get("/api/books/");
                 setBookList(bookList);

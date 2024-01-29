@@ -1,7 +1,7 @@
 import "./AddBook.css"
 import { useState } from "react";
 import  axios from "axios";
-//import { getAxiosErrorMessages } from "./utils";
+import { getAxiosErrorMessages } from "./utils";
 
 let port = 3000;
 let host = "localhost";
@@ -21,7 +21,9 @@ function AddBook() {
     let handleSubmit = async function () {
         try{
             console.log("Flag 2");
-            const res = await axios.get(`/api/authors/name/${author}`,);
+            console.log(author);
+            let res = await axios.get(`/api/authors/name/${author}`,);
+            console.log("Flag 7");
             let a_id;
 
             console.log("Flag 6"+res.status)
@@ -36,15 +38,14 @@ function AddBook() {
             }
             console.log("Flag 4");
             console.log("Flag 1");
-            let id=1111;
-            const entry = {id: id, author_id: a_id, title: title, pub_year: pub_year, genre: genre};
+            const entry = {author_id: a_id, title: title, pub_year: pub_year, genre: genre};
             console.log(entry);
             await axios.post('/api/books/post', entry);
             console.log("Flag 3");
             setMessages(["Widget successfully added"]);
         }catch (error) {
             console.log("Error in AddBook.tsx");
-            //console.log(getAxiosErrorMessages(error));
+            console.log(getAxiosErrorMessages(error));
         }
     }
     
