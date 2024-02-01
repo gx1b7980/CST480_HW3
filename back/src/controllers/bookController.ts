@@ -59,4 +59,16 @@ const deleteBook = async (req: Request, res: Response) => {
     }
 };
 
-export { getAllBooks, getBookById, createBook, deleteBook };
+const editBook = async (req: Request, res: Response) => {
+    try{
+        const book = await Book.findById(req.params.id);
+        console.log("BOOK: " + book);
+        await Book.update(req.params.id, req.body);
+        console.log("Book Updated");
+        res.status(204).json("item.data");
+    }catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export { getAllBooks, getBookById, createBook, deleteBook, editBook };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllBooks, getBookById, createBook, deleteBook } from '../controllers/bookController.js'; 
+import { getAllBooks, getBookById, createBook, deleteBook, editBook } from '../controllers/bookController.js'; 
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.get('/:id', getBookById);
 router.post('/post', createBook);
 
 // PUT update an existing book
-//router.put('/:id', updateBook);
+router.put('/:id', editBook);
 
 // DELETE a book
 router.delete('/:id', deleteBook);
