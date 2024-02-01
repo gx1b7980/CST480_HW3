@@ -13,7 +13,7 @@ router.get('/:id', getBookById);
 router.post('/post', createBook);
 
 // PUT update an existing book
-router.put('/:id', editBook);
+router.put('/edit', editBook);
 
 // DELETE a book
 router.delete('/:id', deleteBook);

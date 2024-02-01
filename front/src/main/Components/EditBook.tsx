@@ -34,7 +34,29 @@ function EditBook() {
 
     let handleSubmit = async function () {
         try {
-            // Your submit logic here
+            console.log("Flag 2");
+            console.log(author);
+            let res = await axios.get(`/api/authors/name/${author}`,);
+            console.log("Flag 7");
+            let a_id;
+
+            console.log("Flag 6: "+res.status)
+            if(res.status == 404){
+                const name = author;
+                const bio = "";
+                const auth = {name, bio}
+                console.log("Flag 4");
+                a_id = (await axios.post("/api/authors/post",auth)).data.lastID;
+                
+            }else{
+                a_id = (await axios.get(`/api/authors/name/${author}`)).data;
+                console.log("Flag 5: "+a_id);
+            }
+            const entry = {author_id: a_id, title: title, pub_year: pub_year, genre: genre};
+            console.log(entry);
+            await axios.put('/api/books/edit', entry);
+            console.log("Flag 3");
+            setMessages(["Widget successfully added"]);
         } catch {
             // Error handling logic here
         }
@@ -77,7 +99,13 @@ function EditBook() {
                         <input type="text" value={genre} onChange={(e) => setGenre(e.target.value)} />
                         <input type="submit" value="Submit" onClick={handleSubmit} />
                     </label>
+                    <div className="error-message">
+                    {messages.map((message, i) => (
+                        <div key={i}>{message}</div>
+                    ))}
+                </div>
         </div>
+        
     );
 }
 
