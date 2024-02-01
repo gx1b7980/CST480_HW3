@@ -4,34 +4,50 @@
 a {
     text-decoration: none;
     color: inherit; /* Optional: ensures that the link color is the same as the text color */
+    width: 100%;
+    align-content: center;
   }
   
   /* Style the navigation bar */
-  nav {
+nav {
     background-color: #333; /* Dark background for the navbar */
     padding: 1rem; /* Padding around the links */
+    width: 100%;
+    align-content: center;
   }
   
   /* Style the links inside the navbar */
-  nav a {
+nav a {
     color: white; /* Light text color for contrast */
     margin-right: 1rem; /* Space out the links */
     padding: 0.5rem 1rem; /* Padding for each link */
     border-radius: 4px; /* Rounded corners for the links */
     transition: background-color 0.3s; /* Smooth transition for hover effect */
+    width: 100%;
+    align-content: center;
   }
   
   /* Hover effect for links */
-  nav a:hover {
+nav a:hover {
     background-color: #575757; /* Darker background on hover */
+
+  }
+
+nav main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Ensures the div takes full width */
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
   }
   
   /* Style the main content area */
-  main {
-    margin: 1rem; /* Margin around the main content */
-    padding: 1rem; /* Padding inside the main content area */
+main {
+    margin: 20px; /* Margin around the main content */
+    padding: 20px; /* Padding inside the main content area */
     border-radius: 4px; /* Rounded corners for the main content area */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow around the main content area */
     background-color: #fff; /* Light background for the content area */
+    width: 95%; /* Ensures the main content area takes full width */
   }
   

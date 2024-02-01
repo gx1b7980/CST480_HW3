@@ -7,6 +7,7 @@ import NotFound from "./Components/notFound";
 import Home from "./Components/Home";
 import BookTable from "./Components/BookTable";
 import AddBook from "./Components/AddBook";
+import EditBook from "./Components/EditBook";
 
 
 let router = createBrowserRouter([
@@ -32,6 +33,10 @@ let router = createBrowserRouter([
             {
                 path: "/AddBook",
                 element: <AddBook />,
+            },
+            {
+                path: "/EditBook",
+                element: <EditBook />,
             }   
         ],
     },

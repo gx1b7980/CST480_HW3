@@ -21,7 +21,7 @@ class Book {
         const row = await db.get(`SELECT * FROM books WHERE id = ?`, [id]);
         return row;
     }
-    //To implement the following functions later for HW2
+    //To implement the following functions later
     /*
     static async findByAuthorId(author_id:any) {
         // Fetch all books by author id from the database
@@ -40,14 +40,11 @@ class Book {
         const rows = await db.all(`SELECT * FROM books WHERE genre = ?`, [genre]);
         return rows;
     }
-
-    static async update(id:any, data:any) {
-        
+*/
+    static async update(id, data) {
         const result = await db.run(`UPDATE books SET author_id = ?, title = ?, pub_year = ?, genre = ? WHERE id = ?`, [data.author_id, data.title, data.pub_year, data.genre, id]);
         return result;
     }
-
-    */
     static async create(data) {
         // Create a new book in the database
         const result = await db.run(`INSERT INTO books (author_id, title, pub_year, genre) VALUES (?, ?, ?, ?)`, [data.author_id, data.title, data.pub_year, data.genre]);

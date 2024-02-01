@@ -56,4 +56,16 @@ const deleteBook = async (req, res) => {
         res.status(500).json({ message: "Fail with code 0" });
     }
 };
-export { getAllBooks, getBookById, createBook, deleteBook };
+const editBook = async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id);
+        console.log("BOOK: " + book);
+        await Book.update(req.params.id, req.body);
+        console.log("Book Updated");
+        res.status(204).json("item.data");
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+export { getAllBooks, getBookById, createBook, deleteBook, editBook };

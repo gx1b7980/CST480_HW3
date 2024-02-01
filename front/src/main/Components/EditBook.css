@@ -1,0 +1,57 @@
+/* editBook.css */
+
+/* Reset margin and padding for the body to ensure full width utilization */
+
+/* General styling for the form container */
+div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Ensures the div takes full width */
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+}
+
+/* Styling for the select dropdown */
+select {
+    width: 95%; /* Full width */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    box-sizing: border-box; /* Includes padding and border in the element's total width */
+}
+
+/* Styling for labels */
+label {
+    padding: 20px;
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Includes padding and border in the element's total width */
+}
+
+/* Styling for input fields */
+input[type="text"] {
+    width: 100%; /* Full width */
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Includes padding and border in the element's total width */
+}
+
+/* Styling for the submit button */
+input[type="submit"] {
+    width: 100%; /* Full width */
+    padding: 10px 0;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box; /* Includes padding and border in the element's total width */
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
