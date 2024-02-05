@@ -27,13 +27,10 @@ class Author {
         return row;
     }
 
-    static async create(data:any) {
+    static async create(a_name: string, bio: string) {
         // Create a new author in the database
-        console.log(data.id);
-        console.log("Flag3");
-        let id = data.id;
-        let a_name = data.a_name;
-        let bio = data.bio;
+        console.log(a_name);
+        console.log("Create Flag3");
         let result; 
         try{
             result = await db.run(`INSERT INTO authors(a_name, bio) VALUES(?, ?)`, [a_name, bio]);

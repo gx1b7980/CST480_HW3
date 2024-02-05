@@ -50,8 +50,9 @@ const getAuthorById = async (req, res) => {
 };
 const createAuthor = async (req, res) => {
     try {
-        console.log("Flag1");
-        let author = await Author.create(req.body);
+        console.log("Flag0");
+        console.log("Flag1: " + req.body.name + " " + req.body.bio);
+        let author = await Author.create(req.body.name, req.body.bio);
         console.log("Flag2");
         console.log(author);
         res.status(201).json(author);

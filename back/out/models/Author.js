@@ -21,13 +21,10 @@ class Author {
         row = await db.get("SELECT * FROM authors WHERE a_name = ?", [a_name]);
         return row;
     }
-    static async create(data) {
+    static async create(a_name, bio) {
         // Create a new author in the database
-        console.log(data.id);
-        console.log("Flag3");
-        let id = data.id;
-        let a_name = data.a_name;
-        let bio = data.bio;
+        console.log(a_name);
+        console.log("Create Flag3");
         let result;
         try {
             result = await db.run(`INSERT INTO authors(a_name, bio) VALUES(?, ?)`, [a_name, bio]);

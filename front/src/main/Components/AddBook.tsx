@@ -37,10 +37,12 @@ function AddBook() {
             }catch (error) {
                 console.log("Error in AddBook.tsx Add Author");
                 const name = author;
+                console.log("Name is"+name);
                 const bio = "";
                 const auth = {name, bio}
                 console.log("Flag 4");
-                a_id = (await axios.post("/api/authors/post",auth)).data.lastID;
+                let add_req = await axios.post("/api/authors/post",auth);
+                a_id = add_req.data.lastID;
                 console.log("Flag 5: "+a_id);
             }
             const entry = {author_id: a_id, title: title, pub_year: pub_year, genre: genre};

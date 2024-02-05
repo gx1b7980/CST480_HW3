@@ -67,6 +67,11 @@ function EditBook() {
         try {
             await axios.delete(`/api/books/${book_id}`);
             setMessages(['"'+ title+ '"'+" Successfully Deleted"]);
+            setAuthor("");
+            setTitle("");
+            setPub_year("");
+            setGenre("");
+            location.reload();
         } catch(error) {
             console.log("Error in Editbook.tsx");
             console.log(getAxiosErrorMessages(error));
