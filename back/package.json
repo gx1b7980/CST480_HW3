@@ -10,7 +10,10 @@
     "dependencies": {
         "@emotion/react": "^11.11.3",
         "@emotion/styled": "^11.11.0",
+        "@material/ripple": "^14.0.0",
         "@mui/material": "^5.15.7",
+        "@mui/styled-engine": "^5.15.7",
+        "@mui/styles": "^5.15.7",
         "cores": "^0.8.5",
         "cors": "^2.8.5",
         "express": "^4.18.2",
@@ -22,7 +25,7 @@
     "peerDependencies": {
         "react": "^17.0.0 || ^18.0.0",
         "react-dom": "^17.0.0 || ^18.0.0"
-      },
+    },
     "devDependencies": {
         "@types/cors": "^2.8.17",
         "@types/express": "^4.17.15",

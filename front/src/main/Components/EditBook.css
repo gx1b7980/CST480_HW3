@@ -1,7 +1,11 @@
-/* editBook.css */
 
-/* Reset margin and padding for the body to ensure full width utilization */
 
+.custom-text-button,
+.custom-outlined-button {
+  --mdc-theme-primary: #FEDBD0;
+  --mdc-theme-on-primary: #442C2E;
+    color-scheme : #84565E;
+}
 /* General styling for the form container */
 div {
     display: flex;

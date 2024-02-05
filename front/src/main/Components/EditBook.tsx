@@ -2,6 +2,7 @@ import "./editBook.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { authorList, bookList, getAxiosErrorMessages } from "./utils";
+import  StyledButton from "./EditBook_MUI";
 
 let port = 3000;
 let host = "localhost";
@@ -62,6 +63,14 @@ function EditBook() {
             console.log(getAxiosErrorMessages(error));
         }
     };
+    /*
+    function SubmitButton() {
+        return <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>;
+    }
+    
+    function DeleteButton() {
+        return <Button variant="contained" color="secondary" onClick={handleDelete}>Delete</Button>;
+    }*/
 
     let handleDelete = async function () {
         try {
@@ -113,14 +122,19 @@ function EditBook() {
                         <input type="text" value={pub_year} onChange={(e) => setPub_year(e.target.value)} />
                         Genre:
                         <input type="text" value={genre} onChange={(e) => setGenre(e.target.value)} />
-                        <input type="submit" value="Submit" onClick={handleSubmit} />
-                        <input type="submit" value="Delete" onClick={handleDelete} />
+                        {/*<input type="submit" value="Submit" onClick={handleSubmit} />
+                        <input type="submit" value="Delete" onClick={handleDelete} />*/}
                     </label>
+                    <button className="mdc-button" onClick={handleSubmit}>
+                        <span className="mdc-button__ripple"></span>
+                        <span className="mdc-button__label">Submit</span>
+                </button>
                     <div className="error-message">
                     {messages.map((message, i) => (
                         <div key={i}>{message}</div>
                     ))}
                 </div>
+                <StyledButton>Click Me</StyledButton>
         </div>
         
     );
