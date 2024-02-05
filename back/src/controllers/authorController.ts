@@ -1,3 +1,4 @@
+import { cp } from 'fs';
 import Author from '../models/Author.js';
 import { Request, Response } from 'express';
 
@@ -15,8 +16,9 @@ const getAllAuthors = async (req: Request, res: Response) => {
 };
 
 const getAuthorByName = async (req: Request, res: Response) => {
-    console.log(req.params.name);
+    console.log("ENTERS LOOKUP:"+req.params.name);
     try{
+        console.log("Flag 1");
         const author = await Author.findByName(req.params.name);
         console.log("LOOKING FOR: "+req.params.name);
         if (author) {
@@ -24,8 +26,8 @@ const getAuthorByName = async (req: Request, res: Response) => {
             res.status(200).json(a_id);
             console.log("Flag VAO"+a_id);
         } else {
-            return res.status(404);
             console.log("404");
+            res.status(404).json({ message: 'Author not found' });
         }
     }catch(error:any){
         console.log("Unknown error");

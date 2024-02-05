@@ -22,22 +22,27 @@ function AddBook() {
         try{
             console.log("Flag 2");
             console.log(author);
-            let res = await axios.get(`/api/authors/name/${author}`,);
-            console.log("Flag 7");
             let a_id;
-
-            console.log("Flag 6"+res.status)
-            if(res.status == 404){
+            try{
+                console.log("Flag 7");
+                let res ;
+                res = await axios.get(`/api/authors/name/${author}`, {
+                    timeout: 5000 
+                });
+                console.log("Flag 6: "+res.status)
+                
+                a_id = (await axios.get(`/api/authors/name/${author}`,));
+                
+                
+            }catch (error) {
+                console.log("Error in AddBook.tsx Add Author");
                 const name = author;
                 const bio = "";
                 const auth = {name, bio}
+                console.log("Flag 4");
                 a_id = (await axios.post("/api/authors/post",auth)).data.lastID;
                 console.log("Flag 5: "+a_id);
-            }else{
-                a_id = res.data;
             }
-            console.log("Flag 4");
-            console.log("Flag 1");
             const entry = {author_id: a_id, title: title, pub_year: pub_year, genre: genre};
             console.log(entry);
             await axios.post('/api/books/post', entry);

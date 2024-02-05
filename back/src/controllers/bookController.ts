@@ -37,6 +37,7 @@ const createBook = async (req: Request, res: Response) => {
         console.log("BOOK: " + book.lastID);
         res.status(201).json(book);
     } catch (error: any) {
+        console.log("Fail with code 0 in create boom");
         res.status(500).json({ message: error.message });
     }
 };

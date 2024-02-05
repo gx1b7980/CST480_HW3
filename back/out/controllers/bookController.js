@@ -36,6 +36,7 @@ const createBook = async (req, res) => {
         res.status(201).json(book);
     }
     catch (error) {
+        console.log("Fail with code 0 in create boom");
         res.status(500).json({ message: error.message });
     }
 };

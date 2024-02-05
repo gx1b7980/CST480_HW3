@@ -56,9 +56,20 @@ function EditBook() {
             console.log(entry);
             await axios.put('/api/books/edit', entry);
             console.log("Flag 3");
-            setMessages(["Widget successfully added"]);
-        } catch {
-            // Error handling logic here
+            setMessages(['"'+ title+ '"'+" Successfully Edited"]);
+        } catch(error) {
+            console.log("Error in Editbook.tsx");
+            console.log(getAxiosErrorMessages(error));
+        }
+    };
+
+    let handleDelete = async function () {
+        try {
+            await axios.delete(`/api/books/${book_id}`);
+            setMessages(['"'+ title+ '"'+" Successfully Deleted"]);
+        } catch(error) {
+            console.log("Error in Editbook.tsx");
+            console.log(getAxiosErrorMessages(error));
         }
     };
 
@@ -98,6 +109,7 @@ function EditBook() {
                         Genre:
                         <input type="text" value={genre} onChange={(e) => setGenre(e.target.value)} />
                         <input type="submit" value="Submit" onClick={handleSubmit} />
+                        <input type="submit" value="Delete" onClick={handleDelete} />
                     </label>
                     <div className="error-message">
                     {messages.map((message, i) => (
