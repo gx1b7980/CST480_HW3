@@ -1,8 +1,7 @@
-import "./editBook.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { authorList, bookList, getAxiosErrorMessages } from "./utils";
-import  StyledButton from "./EditBook_MUI";
+import { bookList as bookListType, getAxiosErrorMessages } from "./utils";
+import { FormControl, InputLabel, Select, MenuItem, TextField, Button, Box, Typography, Container } from "@mui/material";
 
 let port = 3000;
 let host = "localhost";
@@ -12,26 +11,24 @@ let baseURL = `${protocol}://${host}:${port}`;
 axios.defaults.baseURL = baseURL;
 
 function EditBook() {
-    let [messages, setMessages] = useState<string[]>([]);
-    let [bookList, setBookList] = useState<bookList[]>([]);
+    const [messages, setMessages] = useState<string[]>([]);
+    const [bookList, setBookList] = useState<bookListType[]>([]);
     const [title, setTitle] = useState("");
-    const [book_id, setBook_id] = useState(Number);
+    const [book_id, setBook_id] = useState("");
     const [author, setAuthor] = useState("");
     const [pub_year, setPub_year] = useState("");
     const [genre, setGenre] = useState("");
 
     useEffect(() => {
         (async () => {
-            try{
-                let {data: bookList} = await axios.get("/api/books/");
-                setBookList(bookList);
+            try {
+                const { data: fetchedBooks } = await axios.get("/api/books/");
+                setBookList(fetchedBooks);
+            } catch (error) {
+                console.error("Error in EditBook:", getAxiosErrorMessages(error));
             }
-            catch (error) {
-                console.log("Error in Repository.tsx");
-                console.log(getAxiosErrorMessages(error));
-            }
-        })(); 
-    },[]);  
+        })();
+    }, []);
 
     let handleSubmit = async function () {
         try {
@@ -103,40 +100,72 @@ function EditBook() {
     };
 
     return (
-        <div>
-            <select value={book_id} onChange={(e) => setVars(parseInt(e.target.value))}>
-                <option value="">Select a book</option>
-                {bookList.map(({id, title}) => (
-                    <option key={id} value={id} >
-                        {title}
-                    </option>
-                    
-                ))}
-            </select>
-            <label>
-                        Title:
-                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-                        Author:
-                        <input type="text" value={author} onChange={(e) => setAuthor(e.target.value)} />
-                        Publication Year:
-                        <input type="text" value={pub_year} onChange={(e) => setPub_year(e.target.value)} />
-                        Genre:
-                        <input type="text" value={genre} onChange={(e) => setGenre(e.target.value)} />
-                        {/*<input type="submit" value="Submit" onClick={handleSubmit} />
-                        <input type="submit" value="Delete" onClick={handleDelete} />*/}
-                    </label>
-                    <button className="mdc-button" onClick={handleSubmit}>
-                        <span className="mdc-button__ripple"></span>
-                        <span className="mdc-button__label">Submit</span>
-                </button>
-                    <div className="error-message">
-                    {messages.map((message, i) => (
-                        <div key={i}>{message}</div>
-                    ))}
-                </div>
-                <StyledButton>Click Me</StyledButton>
-        </div>
-        
+        <Container maxWidth="sm">
+            <Box my={4}>
+                <Typography variant="h4" gutterBottom>Edit Book</Typography>
+                <FormControl fullWidth margin="normal">
+                    <InputLabel id="select-book-label">Select a Book</InputLabel>
+                    <Select
+                        labelId="select-book-label"
+                        value={book_id}
+                        onChange={(e) => setVars(parseInt(e.target.value))}
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        {bookList.map(({ id, title }) => (
+                            <MenuItem key={id} value={id}>{title}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <TextField
+                    label="Title"
+                    fullWidth
+                    margin="normal"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
+                <TextField
+                    label="Author"
+                    fullWidth
+                    margin="normal"
+                    value={author}
+                    onChange={(e) => setAuthor(e.target.value)}
+                />
+                <TextField
+                    label="Publication Year"
+                    fullWidth
+                    margin="normal"
+                    value={pub_year}
+                    onChange={(e) => setPub_year(e.target.value)}
+                />
+                <TextField
+                    label="Genre"
+                    fullWidth
+                    margin="normal"
+                    value={genre}
+                    onChange={(e) => setGenre(e.target.value)}
+                />
+                <Box mt={2} display="flex" justifyContent="space-between">
+                    <Button variant="contained" color="primary" onClick={handleSubmit}>
+                        Submit
+                    </Button>
+                    <Button variant="contained" color="secondary" onClick={handleDelete}>
+                        Delete
+                    </Button>
+                </Box>
+                {messages.length > 0 && (
+                    <Box mt={2}>
+                        {messages.map((message, index) => (
+                            <Typography key={index} color="error">
+                                {message}
+                            </Typography>
+                        ))}
+                    </Box>
+                )}
+            </Box>
+        </Container>
     );
 }
 

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { authorList, bookList, getAxiosErrorMessages } from "./utils";
 import axios from "axios";
+import { authorList, bookList, getAxiosErrorMessages } from "./utils";
 import "./repository.css";
-
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
 let port = 3000;
 let host = "localhost";
@@ -12,41 +12,39 @@ let baseURL = `${protocol}://${host}:${port}`;
 axios.defaults.baseURL = baseURL;
 
 function BookTable() {
-    let [bookList, setBookList] = useState<bookList[]>([]);
-    let [authorTable, setAuthorList] = useState<authorList[]>([]);
+    const [bookList, setBookList] = useState<bookList[]>([]);
+    const [authorTable, setAuthorList] = useState<authorList[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchCategory, setSearchCategory] = useState('');
+
     useEffect(() => {
         (async () => {
-            try{
-                let {data: authorTable} = await axios.get("/api/authors/all");
-                console.log("ATABLE IS"+authorTable.length);
-                setAuthorList(authorTable);
-                let {data: bookList} = await axios.get("/api/books/");
-                setBookList(bookList);
+            try {
+                const { data: fetchedAuthors } = await axios.get("/api/authors/all");
+                setAuthorList(fetchedAuthors);
+                const { data: fetchedBooks } = await axios.get("/api/books/");
+                setBookList(fetchedBooks);
+            } catch (error) {
+                console.error("Error in BookTable:", getAxiosErrorMessages(error));
             }
-            catch (error) {
-                console.log("Error in Repository.tsx");
-                console.log(getAxiosErrorMessages(error));
-            }
-        })(); 
-    },[]);   
+        })();
+    }, []);
+
     return (
         <>
-
             <h1>Book Database</h1>
             <b>Use the following DropDown to select the category you want to search in</b>
             <div id="Category Box">
                 <select 
                     value={searchCategory}
                     onChange={(e) => setSearchCategory(e.target.value)}>
+                    <option value="">Select Category</option>
                     <option value="title">Title</option>
                     <option value="author">Author</option>
                     <option value="genre">Genre</option>
                     <option value="pub_year">Year</option>
                 </select>
             </div>
-            {console.log(searchCategory)}
             <b>Use the following search box to search for a book</b>
             <div id="Search Box">
                 <input
@@ -56,57 +54,54 @@ function BookTable() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
             </div>
-            <div id="bookTable"> 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Book ID</th>
-                            <th>Book Title</th>
-                            <th>Book Author</th>
-                            <th>Book Genre</th>
-                            <th>Book Year</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {bookList
-                        .filter(({
-                            title, author_id, genre, pub_year
-                        }) => {
-                            if (searchCategory === "title") {
-                                return title.toLowerCase().includes(searchTerm.toLowerCase());
+            <TableContainer component={Paper} id="bookTable">
+                <Table aria-label="book table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Book ID</TableCell>
+                            <TableCell>Book Title</TableCell>
+                            <TableCell>Book Author</TableCell>
+                            <TableCell>Book Genre</TableCell>
+                            <TableCell>Book Year</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {bookList.filter(book => {
+                            let filterPass = true;
+                            if (searchCategory && searchTerm) {
+                                switch (searchCategory) {
+                                    case 'title':
+                                        filterPass = book.title.toLowerCase().includes(searchTerm.toLowerCase());
+                                        break;
+                                    case 'author':
+                                        const authorName = authorTable.find(author => author.id === book.author_id)?.a_name.toLowerCase() || '';
+                                        filterPass = authorName.includes(searchTerm.toLowerCase());
+                                        break;
+                                    case 'genre':
+                                        filterPass = book.genre.toLowerCase().includes(searchTerm.toLowerCase());
+                                        break;
+                                    case 'pub_year':
+                                        filterPass = book.pub_year.toString().includes(searchTerm);
+                                        break;
+                                    default:
+                                        filterPass = true;
+                                }
                             }
-                            else if (searchCategory === "author") {
-                                return authorTable.find(({ id }) => id === author_id)?.a_name.toLowerCase().includes(searchTerm.toLowerCase());
-                            }
-                            else if (searchCategory === "genre") {
-                                return genre.toLowerCase().includes(searchTerm.toLowerCase());
-                            }
-                            else if (searchCategory === "pub_year") {
-                                return pub_year.toString().includes(searchTerm);
-                            }
-                            else {
-                                return title.toLowerCase().includes(searchTerm.toLowerCase());
-                            }
-                        })
-                        .map(({
-                            id, author_id, title, pub_year, genre
-                        }) => (
-                            <tr key={id}>
-                                <td key={`${id}-id`}>{id}</td>
-                                <td key={`${id}-title`}>{title}</td>
-                                <td key={`${id}-author_id`}>
-                                    {
-                                        authorTable.find(({ id }) => id === author_id)?.a_name
-                                    }</td>
-                                <td key={`${id}-genre`}>{genre}</td>
-                                <td key={`${id}-pub_year`}>{pub_year}</td>
-                            </tr>
+                            return filterPass;
+                        }).map((book) => (
+                            <TableRow key={book.id}>
+                                <TableCell>{book.id}</TableCell>
+                                <TableCell>{book.title}</TableCell>
+                                <TableCell>{authorTable.find(author => author.id === book.author_id)?.a_name}</TableCell>
+                                <TableCell>{book.genre}</TableCell>
+                                <TableCell>{book.pub_year}</TableCell>
+                            </TableRow>
                         ))}
-                        </tbody>
-                </table>
-            </div>
-            </>
-)};
-
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
+    );
+}
 
 export default BookTable;

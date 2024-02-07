@@ -1,27 +1,32 @@
-import { Link, Outlet } from "react-router-dom";
+import React from 'react';
+import { Link } from "react-router-dom";
+import { AppBar, Toolbar, Button, Box, Container } from '@mui/material';
+import { Outlet } from 'react-router-dom';
 import "./Layout.css";
 
 function Header() {
     return (
-        <>
-            <Link to="/">Home</Link>
-            <Link to="/repository">Full Default Database</Link>
-            <Link to="/BTable">Book Table</Link>
-            <Link to="/AddBook">Add Book</Link>
-            <Link to="/EditBook">Edit Book</Link>
-        </>
+        <Toolbar>
+            <Button color="inherit" component={Link} to="/">Home</Button>
+            <Button color="inherit" component={Link} to="/repository">Full Default Database</Button>
+            <Button color="inherit" component={Link} to="/BTable">Book Table</Button>
+            <Button color="inherit" component={Link} to="/AddBook">Add Book</Button>
+            <Button color="inherit" component={Link} to="/EditBook">Edit Book</Button>
+        </Toolbar>
     );
 }
 
 function Layout() {
     return (
         <>
-            <nav>
+            <AppBar position="static">
                 <Header />
-            </nav>
-            <main>
-                <Outlet />
-            </main>
+            </AppBar>
+            <Container>
+                <Box my={4}>
+                    <Outlet />
+                </Box>
+            </Container>
         </>
     );
 }
